@@ -13,3 +13,12 @@ wire:
 	cd pkg/di && wire
 
 all : proto wire run
+
+docker-build:
+	docker buid -t nikhil382/go-basic-grpc-api-gateway .
+
+docker-up:
+	docker-compose up -d
+
+docker-down:
+	docker-compose down

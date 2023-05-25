@@ -1,0 +1,9 @@
+version: '3'
+services:
+  api-gateway:
+    image: nikhil382/go-basic-grpc-api-gateway
+    ports:
+      - 8000:8000
+    environment:
+      - PORT=:8000
+      - AUTH_SERVICE_URL=50051
