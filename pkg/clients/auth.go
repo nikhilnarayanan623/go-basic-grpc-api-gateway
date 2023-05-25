@@ -2,7 +2,7 @@ package clients
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"nikhilnarayanan623/go-basic-grpc-api-gateway/pkg/clients/interfaces"
 	"nikhilnarayanan623/go-basic-grpc-api-gateway/pkg/config"
 	"nikhilnarayanan623/go-basic-grpc-api-gateway/pkg/domain"
@@ -20,7 +20,7 @@ func NewAuthServiceClient(cfg *config.Config) (interfaces.AuthServiceClient, err
 
 	grpcClientConn, err := grpc.Dial(cfg.AuthServiceUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return nil, errors.New("faild to create grpc connection")
+		return nil, fmt.Errorf("faild to create grpc connection error:%s", err.Error())
 	}
 
 	authSericeClient := authpb.NewAuthServiceClient(grpcClientConn)

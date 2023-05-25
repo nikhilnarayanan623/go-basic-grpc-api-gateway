@@ -1,10 +1,10 @@
 package domain
 
 type Response struct {
-	Status  bool
-	Message string      `json:"message"`
-	Error   string      `json:"error"`
-	Data    interface{} `json:"data"`
+	StatusCode uint32
+	Message    string      `json:"message"`
+	Error      interface{} `json:"error"`
+	Data       interface{} `json:"data"`
 }
 
 type SignupRequest struct {

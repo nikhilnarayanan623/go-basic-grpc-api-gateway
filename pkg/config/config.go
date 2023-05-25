@@ -9,15 +9,18 @@ type Config struct {
 	AuthServiceUrl string `mapstructure:"AUTH_SERVICE_URL"`
 }
 
+var envs = []string{"PORT", "AUTH_SERVICE_URL"}
+
 func LoadConfig() (config *Config, err error) {
 
-	viper.AddConfigPath("./pkg/config/envs")
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
+	viper.AddConfigPath("./")
+	viper.SetConfigFile(".env")
+	viper.ReadInConfig()
 
-	viper.AutomaticEnv()
-	if err = viper.ReadInConfig(); err != nil {
-		return
+	for _, env := range envs {
+		if err = viper.BindEnv(env); err != nil {
+			return
+		}
 	}
 
 	err = viper.Unmarshal(&config)
