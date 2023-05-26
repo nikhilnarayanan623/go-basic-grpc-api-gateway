@@ -15,9 +15,9 @@ type Server struct {
 
 func NewServer(cfg *config.Config, autHandler interfaces.AuthHandler, middleware middleware.Middleware) *Server {
 
-	engine := gin.New()
+	engine := gin.Default()
 
-	auth := engine.Group("/auth", middleware.UserAuthenticate)
+	auth := engine.Group("/auth")
 	auth.POST("/signup", autHandler.UserSignup)
 	auth.POST("/login", autHandler.UserLogin)
 

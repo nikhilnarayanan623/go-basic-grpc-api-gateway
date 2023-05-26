@@ -33,7 +33,8 @@ func (c *authHandler) UserLogin(ctx *gin.Context) {
 	res, err := c.authClient.UserLogin(ctx, body)
 
 	if err != nil {
-		response := utils.ErrorResponse(http.StatusBadRequest, "faild to login", res.Error, nil)
+		errString := res.Error + err.Error()
+		response := utils.ErrorResponse(http.StatusBadRequest, "faild to login", errString, nil)
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -41,6 +42,7 @@ func (c *authHandler) UserLogin(ctx *gin.Context) {
 	response := utils.SuccessResponse(http.StatusOK, "successfully logged in", res)
 	ctx.JSON(http.StatusOK, response)
 }
+
 func (c *authHandler) UserSignup(ctx *gin.Context) {
 
 	var body domain.SignupRequest
@@ -53,7 +55,8 @@ func (c *authHandler) UserSignup(ctx *gin.Context) {
 
 	res, err := c.authClient.UserSignup(ctx, body)
 	if err != nil {
-		response := utils.ErrorResponse(http.StatusBadGateway, "faild to signup", res.Error, nil)
+		errString := res.Error + err.Error()
+		response := utils.ErrorResponse(http.StatusBadGateway, "faild to signup", errString, nil)
 		ctx.JSON(http.StatusBadGateway, response)
 		return
 	}

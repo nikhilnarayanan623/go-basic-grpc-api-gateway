@@ -4,7 +4,7 @@
 // - protoc             v3.12.4
 // source: pkg/pb/auth.proto
 
-package authpb
+package pb
 
 import (
 	context "context"
@@ -28,7 +28,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthServiceClient interface {
-	UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupRsponse, error)
+	UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error)
 	UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidateAccessToken(ctx context.Context, in *ValidateRequest, opts ...grpc.CallOption) (*ValidateResponse, error)
 }
@@ -41,8 +41,8 @@ func NewAuthServiceClient(cc grpc.ClientConnInterface) AuthServiceClient {
 	return &authServiceClient{cc}
 }
 
-func (c *authServiceClient) UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupRsponse, error) {
-	out := new(SignupRsponse)
+func (c *authServiceClient) UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error) {
+	out := new(SignupResponse)
 	err := c.cc.Invoke(ctx, AuthService_UserSignup_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func (c *authServiceClient) ValidateAccessToken(ctx context.Context, in *Validat
 // All implementations must embed UnimplementedAuthServiceServer
 // for forward compatibility
 type AuthServiceServer interface {
-	UserSignup(context.Context, *SignupRequest) (*SignupRsponse, error)
+	UserSignup(context.Context, *SignupRequest) (*SignupResponse, error)
 	UserLogin(context.Context, *LoginRequest) (*LoginResponse, error)
 	ValidateAccessToken(context.Context, *ValidateRequest) (*ValidateResponse, error)
 	mustEmbedUnimplementedAuthServiceServer()
@@ -82,7 +82,7 @@ type AuthServiceServer interface {
 type UnimplementedAuthServiceServer struct {
 }
 
-func (UnimplementedAuthServiceServer) UserSignup(context.Context, *SignupRequest) (*SignupRsponse, error) {
+func (UnimplementedAuthServiceServer) UserSignup(context.Context, *SignupRequest) (*SignupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSignup not implemented")
 }
 func (UnimplementedAuthServiceServer) UserLogin(context.Context, *LoginRequest) (*LoginResponse, error) {
