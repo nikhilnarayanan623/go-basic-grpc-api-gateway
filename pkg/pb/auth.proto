@@ -3,17 +3,15 @@ syntax = "proto3";
 package pb;
 option go_package = "./pkg/pb";
 
+import "pkg/pb/response.proto";
+
 service AuthService {
     rpc UserSignup(SignupRequest) returns (SignupResponse){}
     rpc UserLogin(LoginRequest) returns (LoginResponse) {}
     rpc ValidateAccessToken(ValidateRequest) returns (ValidateResponse){}
 }
 
-message Response{
-    uint32 status_code = 1;
-    string message = 2;
-    string error  = 3;
-}
+
 
 message SignupRequest{
     string first_name = 1;

@@ -25,7 +25,7 @@ func (c *authHandler) UserLogin(ctx *gin.Context) {
 	var body domain.LoginRequest
 
 	if err := ctx.ShouldBindJSON(&body); err != nil {
-		response := utils.ErrorResponse(http.StatusBadRequest, "faild to bind inputs", err.Error(), nil)
+		response := utils.ErrorResponse(http.StatusBadRequest, "failed to bind inputs", err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -33,8 +33,7 @@ func (c *authHandler) UserLogin(ctx *gin.Context) {
 	res, err := c.authClient.UserLogin(ctx, body)
 
 	if err != nil {
-		errString := res.Error + err.Error()
-		response := utils.ErrorResponse(http.StatusBadRequest, "faild to login", errString, nil)
+		response := utils.ErrorResponse(http.StatusBadRequest, "failed to login", err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
@@ -48,19 +47,18 @@ func (c *authHandler) UserSignup(ctx *gin.Context) {
 	var body domain.SignupRequest
 
 	if err := ctx.ShouldBindJSON(&body); err != nil {
-		response := utils.ErrorResponse(http.StatusBadRequest, "faild to bind inputs", err.Error(), nil)
+		response := utils.ErrorResponse(http.StatusBadRequest, "failed to bind inputs", err.Error(), nil)
 		ctx.JSON(http.StatusBadRequest, response)
 		return
 	}
 
-	res, err := c.authClient.UserSignup(ctx, body)
+	err := c.authClient.UserSignup(ctx, body)
 	if err != nil {
-		errString := res.Error + err.Error()
-		response := utils.ErrorResponse(http.StatusBadGateway, "faild to signup", errString, nil)
+		response := utils.ErrorResponse(http.StatusBadGateway, "failed to signup", err.Error(), nil)
 		ctx.JSON(http.StatusBadGateway, response)
 		return
 	}
 
-	response := utils.SuccessResponse(http.StatusOK, "successfully signup completed", res)
+	response := utils.SuccessResponse(http.StatusOK, "successfully signup completed", nil)
 	ctx.JSON(http.StatusOK, response)
 }

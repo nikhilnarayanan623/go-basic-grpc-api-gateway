@@ -23,6 +23,11 @@ func InitializeApi(cfg *config.Config) (*http.Server, error) {
 	}
 	authHandler := handler.NewAuthHandler(authServiceClient)
 	middlewareMiddleware := middleware.NewMiddleware(authServiceClient)
-	server := http.NewServer(cfg, authHandler, middlewareMiddleware)
+	userServiceClient, err := clients.NewUserServiceClient(cfg)
+	if err != nil {
+		return nil, err
+	}
+	userHandler := handler.NewUserHandler(userServiceClient)
+	server := http.NewServer(cfg, authHandler, middlewareMiddleware, userHandler)
 	return server, nil
 }
