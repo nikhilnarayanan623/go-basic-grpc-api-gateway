@@ -17,8 +17,12 @@ func InitializeApi(cfg *config.Config) (*http.Server, error) {
 
 	wire.Build(
 		clients.NewAuthServiceClient,
+		clients.NewUserServiceClient,
+
 		handler.NewAuthHandler,
+		handler.NewUserHandler,
 		middleware.NewMiddleware,
+
 		http.NewServer,
 	)
 	return &http.Server{}, nil

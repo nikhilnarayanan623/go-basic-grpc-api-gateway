@@ -30,57 +30,61 @@ func NewAuthServiceClient(cfg *config.Config) (interfaces.AuthServiceClient, err
 	}, nil
 }
 
-func (c *authServiceClient) UserSignup(ctx context.Context, signupDetails domain.SignupRequest) (domain.SignupRsponse, error) {
+func (c *authServiceClient) UserSignup(ctx context.Context, signupDetails domain.SignupRequest) error {
 
-	response, err := c.client.UserSignup(context.Background(), &pb.SignupRequest{
+	res, err := c.client.UserSignup(context.Background(), &pb.SignupRequest{
 		Email:     signupDetails.Email,
 		Password:  signupDetails.Password,
-		FirstName: signupDetails.FristName,
+		FirstName: signupDetails.FirstName,
 		LastName:  signupDetails.LastName,
 	})
 	if err != nil {
-		return domain.SignupRsponse{}, err
+		return err
 	}
-	return domain.SignupRsponse{
-		StatusCode: response.Response.StatusCode,
-		Error:      response.Response.Error,
-		Message:    response.Response.Message,
-	}, nil
+	if res.Response.Error != "" {
+		return fmt.Errorf("%s", res.Response.Error)
+	}
+	return nil
 }
 
 func (c *authServiceClient) UserLogin(ctx context.Context, loginDetails domain.LoginRequest) (domain.LoginResponse, error) {
 
-	response, err := c.client.UserLogin(context.Background(), &pb.LoginRequest{
+	res, err := c.client.UserLogin(context.Background(), &pb.LoginRequest{
 		Email:    loginDetails.Email,
 		Password: loginDetails.Password,
 	})
 
 	if err != nil {
+		fmt.Println("first", err.Error())
 		return domain.LoginResponse{}, err
 	}
 
+	if res.Response.Error != "" {
+		return domain.LoginResponse{}, fmt.Errorf("%s", res.Response.Error)
+	}
+
 	return domain.LoginResponse{
-		StatusCode:  response.Response.StatusCode,
-		Message:     response.Response.Message,
-		Error:       "",
-		AccessToken: response.AccessToken,
+		AccessToken: res.AccessToken,
 	}, nil
 }
 
-func (c *authServiceClient) ValidateAccessToken(ctx context.Context, req domain.ValidatTokenRequest) (domain.ValidateTokenResponse, error) {
+func (c *authServiceClient) ValidateAccessToken(ctx context.Context, req domain.ValidateTokenRequest) (domain.ValidateTokenResponse, error) {
 
 	res, err := c.client.ValidateAccessToken(context.Background(), &pb.ValidateRequest{
 		AccessToken: req.AccessToken,
 	})
-
+	fmt.Println("res", res)
 	if err != nil {
 		return domain.ValidateTokenResponse{}, err
 	}
+	fmt.Println("res", res)
+
+	if res.Response.Error != "" {
+		return domain.ValidateTokenResponse{}, fmt.Errorf("%s", res.Response.Error)
+	}
+	fmt.Println("res", res.UserId)
 
 	return domain.ValidateTokenResponse{
-		StatusCode: res.Response.StatusCode,
-		Message:    res.Response.Message,
-		Error:      "",
-		UserID:     res.UserId,
+		UserID: res.UserId,
 	}, nil
 }
