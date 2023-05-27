@@ -18,6 +18,6 @@ func ErrorResponse(statusCode uint32, message string, err string, data interface
 	return domain.Response{
 		StatusCode: statusCode,
 		Message:    message,
-		Error:      strings.Split(err, "/n"),
+		Error:      strings.Split(err, "\n"),
 	}
 }

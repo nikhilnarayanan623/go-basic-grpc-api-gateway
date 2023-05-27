@@ -8,17 +8,15 @@ type Response struct {
 }
 
 type SignupRequest struct {
-	FristName string `json:"first_name" binding:"required"`
+	FirstName string `json:"first_name" binding:"required"`
 	LastName  string `json:"last_name" binding:"required"`
 	Email     string `json:"email" binding:"required"`
 	Password  string `json:"password" binding:"required"`
 }
 
-type SignupRsponse struct {
-	StatusCode uint32 `json:"status_code"`
-	Message    string `json:"message"`
-	Error      string `json:"error"`
-}
+// type SignupRsponse struct {
+// 	UserID uint32 `json:"user_id"`
+// }
 
 type LoginRequest struct {
 	Email    string `json:"email" binding:"required"`
@@ -26,19 +24,13 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	StatusCode  uint32 `json:"status_code"`
-	Message     string `json:"message"`
-	Error       string `json:"error"`
 	AccessToken string `json:"access_token"`
 }
 
-type ValidatTokenRequest struct {
+type ValidateTokenRequest struct {
 	AccessToken string `json:"access_token" binding:"required"`
 }
 
 type ValidateTokenResponse struct {
-	StatusCode uint32 `json:"status_code"`
-	Message    string `json:"message"`
-	Error      string `json:"error"`
-	UserID     uint32 `json:"user_id"`
+	UserID uint32 `json:"user_id"`
 }

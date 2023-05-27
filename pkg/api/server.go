@@ -13,13 +13,20 @@ type Server struct {
 	cfg    *config.Config
 }
 
-func NewServer(cfg *config.Config, autHandler interfaces.AuthHandler, middleware middleware.Middleware) *Server {
+func NewServer(cfg *config.Config, autHandler interfaces.AuthHandler, middleware middleware.Middleware,
+	userHandler interfaces.UserHandler) *Server {
 
 	engine := gin.Default()
 
 	auth := engine.Group("/auth")
 	auth.POST("/signup", autHandler.UserSignup)
 	auth.POST("/login", autHandler.UserLogin)
+
+	user := engine.Group("/user")
+
+	user.Use(middleware.UserAuthenticate)
+
+	user.GET("/profile", userHandler.GetProfile)
 
 	return &Server{
 		engine: engine,

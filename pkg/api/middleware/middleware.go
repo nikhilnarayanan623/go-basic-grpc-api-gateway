@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	clientInterface "nikhilnarayanan623/go-basic-grpc-api-gateway/pkg/clients/interfaces"
 	"nikhilnarayanan623/go-basic-grpc-api-gateway/pkg/domain"
@@ -26,28 +27,28 @@ func NewMiddleware(client clientInterface.AuthServiceClient) Middleware {
 
 func (c *middleware) UserAuthenticate(ctx *gin.Context) {
 
-	authorzation := ctx.GetHeader("authorization")
+	authorization := ctx.GetHeader("authorization")
 
-	authFields := strings.Fields(authorzation)
+	authFields := strings.Fields(authorization)
+	fmt.Println("token", authFields)
 
-	if len(authFields) < 2 || authFields[1] == "" {
-		response := utils.ErrorResponse(http.StatusBadRequest, "faild to get token", "no token found", nil)
-		ctx.JSON(http.StatusBadGateway, response)
+	if len(authFields) < 2 {
+		response := utils.ErrorResponse(http.StatusBadRequest, "failed verify request", "no token found", nil)
+		ctx.AbortWithStatusJSON(http.StatusBadGateway, response)
 		return
 	}
 
 	accessToken := authFields[1]
 
-	res, err := c.client.ValidateAccessToken(ctx, domain.ValidatTokenRequest{
+	res, err := c.client.ValidateAccessToken(ctx, domain.ValidateTokenRequest{
 		AccessToken: accessToken,
 	})
-
 	if err != nil {
-		response := utils.ErrorResponse(http.StatusBadGateway, "faild to validate token", res.Error, nil)
-		ctx.JSON(http.StatusBadGateway, response)
+		response := utils.ErrorResponse(http.StatusBadGateway, "failed verify request", err.Error(), nil)
+		ctx.AbortWithStatusJSON(http.StatusBadGateway, response)
 		return
 	}
 
-	ctx.Set("userId", res.UserID)
+	ctx.Set("userId", uint64(res.UserID))
 	ctx.Next()
 }

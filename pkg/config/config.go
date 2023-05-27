@@ -7,9 +7,10 @@ import (
 type Config struct {
 	Port           string `mapstructure:"PORT"`
 	AuthServiceUrl string `mapstructure:"AUTH_SERVICE_URL"`
+	UserServiceUrl string `mapstructure:"USER_SERVICE_URL"`
 }
 
-var envs = []string{"PORT", "AUTH_SERVICE_URL"}
+var envs = []string{"PORT", "AUTH_SERVICE_URL", "USER_SERVICE_URL"}
 
 func LoadConfig() (config *Config, err error) {
 

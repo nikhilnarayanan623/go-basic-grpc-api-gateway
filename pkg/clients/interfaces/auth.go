@@ -6,7 +6,7 @@ import (
 )
 
 type AuthServiceClient interface {
-	UserSignup(ctx context.Context, signupDeails domain.SignupRequest) (domain.SignupRsponse, error)
+	UserSignup(ctx context.Context, signupDeails domain.SignupRequest) error
 	UserLogin(ctx context.Context, loginDetails domain.LoginRequest) (domain.LoginResponse, error)
-	ValidateAccessToken(ctx context.Context, tokenRequest domain.ValidatTokenRequest) (domain.ValidateTokenResponse, error)
+	ValidateAccessToken(ctx context.Context, tokenRequest domain.ValidateTokenRequest) (domain.ValidateTokenResponse, error)
 }
