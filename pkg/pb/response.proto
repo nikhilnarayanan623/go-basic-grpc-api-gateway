@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package pb;
+option go_package = "./pkg/pb";
+
+message Response{
+    uint32 status_code = 1;
+    string message = 2;
+    string error  = 3;
+}
